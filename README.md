@@ -3,7 +3,7 @@
 <div align="center">
 
 ![Job Automation Banner](https://img.shields.io/badge/Built%20with-n8n-FF6D5A?style=for-the-badge&logo=n8n)
-![AI Powered](https://img.shields.io/badge/AI%20Powered-Groq%20LLaMA-00A67E?style=for-the-badge&logo=meta)
+![AI Powered](https://img.shields.io/badge/AI%20Powered-OpenRouter%20GPT--4o%20Mini-00A67E?style=for-the-badge&logo=openai)
 ![Google Sheets](https://img.shields.io/badge/Google%20Sheets-34A853?style=for-the-badge&logo=google-sheets&logoColor=white)
 ![Gmail](https://img.shields.io/badge/Gmail-EA4335?style=for-the-badge&logo=gmail&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)
@@ -43,7 +43,7 @@
 - 📧 **Daily Email Report** — Sends one email with everything as an Excel attachment
 - 🗂️ **Google Sheets Tracking** — Auto-saves all jobs with analysis for easy review
 - 🔄 **Daily Auto-Clear** — Resets the sheet every night ready for fresh jobs tomorrow
-- 💰 **100% Free** — Built entirely on free tiers of all services
+- 💰 **Affordable** — Built with cost-effective services (OpenRouter pay-per-use pricing)
 
 ---
 
@@ -96,7 +96,7 @@
 | Tool | Purpose | Cost |
 |------|---------|------|
 | **n8n** (Self-Hosted) | Workflow automation engine | Free |
-| **Groq API** (LLaMA 3.1 8B) | AI analysis, cover letters, resume | Free tier |
+| **OpenRouter API** (GPT-4o Mini) | AI analysis, cover letters, resume | Pay-per-use (~$0.15-0.60/1M tokens) |
 | **RapidAPI** (Indeed Scraper) | Job data scraping | Free tier |
 | **Google Drive** | Resume PDF storage | Free |
 | **Google Sheets** | Job tracking database | Free |
@@ -177,7 +177,7 @@ Every job is saved with these columns:
 - Node.js installed
 - n8n running locally (`npx n8n`)
 - Google account
-- Groq API key (free)
+- OpenRouter API key
 - RapidAPI key (free)
 
 ---
@@ -192,10 +192,17 @@ Open: `http://localhost:5678`
 
 ### Step 2: Get API Keys
 
-#### Groq API (AI Engine) — Free
-1. Go to [console.groq.com](https://console.groq.com)
-2. Sign up → API Keys → Create Key
-3. Copy key starting with `gsk_...`
+#### OpenRouter API (AI Engine)
+1. Go to [openrouter.ai](https://openrouter.ai)
+2. Sign up and navigate to API Keys
+3. Create a new API key
+4. Copy your key starting with `sk-or-v1-...`
+5. Add credits to your account (OpenRouter uses pay-per-use pricing)
+
+**Model Used:** `openai/gpt-4o-mini`
+- Input: ~$0.15/1M tokens
+- Output: ~$0.60/1M tokens
+- Estimated daily cost: ~$0.05-0.15 for 15 jobs
 
 #### RapidAPI Indeed Scraper — Free Tier
 1. Go to [rapidapi.com](https://rapidapi.com)
@@ -242,12 +249,16 @@ Upload your resume PDF to Google Drive and name it `Master_Resume.pdf`
 
 ---
 
-### Step 6: Configure AI Prompts
+### Step 6: Configure OpenRouter in n8n
 
-In each AI Agent node, the prompts reference your resume via:
-```
-{{ $('Extract from File').item.json.text }}
-```
+In each AI Agent node:
+1. Select **"OpenRouter"** as the AI provider
+2. Add your OpenRouter API key
+3. Set model to: `openai/gpt-4o-mini`
+4. Configure the prompts to reference your resume via:
+   ```
+   {{ $('Extract from File').item.json.text }}
+   ```
 
 This automatically uses your actual resume PDF — no hardcoding needed!
 
@@ -283,7 +294,8 @@ Open the Excel file, sort by **Match_Score** descending, and start applying to t
 
 | Error | Cause | Fix |
 |-------|-------|-----|
-| `Rate limit exceeded` | Too many Groq requests/min | Add Wait node (3s) before each AI Agent |
+| `Rate limit exceeded` | Too many OpenRouter requests/min | Add Wait node (3s) before each AI Agent |
+| `Insufficient credits` | OpenRouter account out of credits | Add credits at openrouter.ai/credits |
 | `403 Forbidden (Google)` | API not enabled | Enable API in Google Cloud Console |
 | `URL parameter undefined` | Wrong field name | Check field name in previous node output |
 | `210 items instead of 15` | Old Sheets node connected | Disconnect Google Sheets Read node |
