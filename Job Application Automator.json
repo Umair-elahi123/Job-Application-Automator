@@ -1,0 +1,997 @@
+{
+  "name": "Job Application Automator",
+  "nodes": [
+    {
+      "parameters": {
+        "model": "openai/gpt-4o-mini",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        -80,
+        160
+      ],
+      "id": "cf9e442c-0a8f-4f60-bb45-fb47fcab6d05",
+      "name": "OpenRouter Chat Model",
+      "credentials": {
+        "openRouterApi": {
+          "id": "bqMxYm1xJavNayNd",
+          "name": "OpenRouter account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-4o-mini",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        912,
+        160
+      ],
+      "id": "0cef3a7f-369e-429a-8868-9f03f4bb7781",
+      "name": "OpenRouter Chat Model1",
+      "credentials": {
+        "openRouterApi": {
+          "id": "bqMxYm1xJavNayNd",
+          "name": "OpenRouter account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-4o-mini",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        416,
+        160
+      ],
+      "id": "ba764eaa-5ca7-46d7-8b8d-1d4cc7bdbe28",
+      "name": "OpenRouter Chat Model2",
+      "credentials": {
+        "openRouterApi": {
+          "id": "bqMxYm1xJavNayNd",
+          "name": "OpenRouter account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "uelahi502@gmail.com",
+        "subject": "=Daily Job Report - {{ new Date().toLocaleDateString() }}",
+        "emailType": "text",
+        "message": "=Please find today's job analysis report attached!",
+        "options": {
+          "attachmentsUi": {
+            "attachmentsBinary": [
+              {}
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1472,
+        192
+      ],
+      "id": "50bdee5a-ca39-40d0-a69b-7ca2b1390f9d",
+      "name": "Send a message",
+      "webhookId": "a148d4e6-496c-4bc6-8d02-5b72d16e9753",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "vAhKtSEPbJ7HbMgQ",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "=https://docs.google.com/spreadsheets/d/1_sqPUe1Vwh68g_01nUVUuBI7iiUTze3LwL3wsRMxGPM/edit?usp=drive_link",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1472,
+        -32
+      ],
+      "id": "e6d623ee-805d-4aeb-ae1a-07a5557d8634",
+      "name": "HTTP Request1"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        1648,
+        -32
+      ],
+      "id": "5b38b252-b9a4-4489-941c-741960fb9904",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "operation": "clear",
+        "documentId": {
+          "__rl": true,
+          "value": "1_sqPUe1Vwh68g_01nUVUuBI7iiUTze3LwL3wsRMxGPM",
+          "mode": "list",
+          "cachedResultName": "Job Applications Tracker",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1_sqPUe1Vwh68g_01nUVUuBI7iiUTze3LwL3wsRMxGPM/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1_sqPUe1Vwh68g_01nUVUuBI7iiUTze3LwL3wsRMxGPM/edit#gid=0"
+        },
+        "keepFirstRow": true
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1648,
+        192
+      ],
+      "id": "e8c3c6f9-79cb-4a9c-bd6f-dbb56ec7935a",
+      "name": "Clear sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "0zCmFl7PbSSnlb34",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 9
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -352,
+        -576
+      ],
+      "id": "8594b4ef-e9c7-4c61-bfac-d10c5f68f742",
+      "name": "Schedule Trigger - Every day at 9 AM"
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "https://drive.google.com/file/d/1haHRBlgc29Xrzo7wH0u9H0W-CvjwecE_/view?usp=drive_link",
+          "mode": "url"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        48,
+        -576
+      ],
+      "id": "2389adab-275b-4257-a4e8-1ddd2f9ae709",
+      "name": "Google Drive    - Download your CV (PDF)",
+      "retryOnFail": false,
+      "waitBetweenTries": 5000,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "uVJF7YYvxnuKaAL4",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        432,
+        -576
+      ],
+      "id": "cea12c61-4476-4271-abd7-562affbb2d9f",
+      "name": "Extract from File    - Extract text from PDF"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "returnvalue.data",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        1328,
+        -576
+      ],
+      "id": "f61d6b00-a4e6-40fb-9f6c-57e01f2f2587",
+      "name": "Splits 15 jobs into individual items",
+      "executeOnce": false
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://indeed-scraper-api.p.rapidapi.com/api/job",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "x-rapidapi-host",
+              "value": "indeed-scraper-api.p.rapidapi.com"
+            },
+            {
+              "name": "x-rapidapi-key",
+              "value": "e555d635d6mshc12bb5c9f4b57c7p141c0ejsn85d798bdb5ff"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"scraper\": {\n    \"maxRows\": 15,\n    \"query\": \"AI Engineer\",\n    \"location\": \"Remote\",\n    \"jobType\": \"fulltime\",\n    \"radius\": \"50\",\n    \"sort\": \"relevance\",\n    \"fromDays\": \"7\",\n    \"country\": \"pk\"\n  }\n}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          },
+          "timeout": 120000
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        912,
+        -576
+      ],
+      "id": "9652a56f-439e-49b7-8777-6feb7a3e83fd",
+      "name": "Fetch 15 fresh jobs from RapidAPI"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "8124905e-b4b6-44e2-905f-1ac208ae7398",
+              "name": "Job_Title",
+              "value": "={{ $json.title }}",
+              "type": "string"
+            },
+            {
+              "id": "f707d22a-8614-4ef8-b7df-28dff0c09aed",
+              "name": "Company",
+              "value": "={{ $json.companyName }}",
+              "type": "string"
+            },
+            {
+              "id": "fcf77998-12f8-4406-92e5-f9ae6b00357e",
+              "name": "Job_URL",
+              "value": "={{ $json.jobUrl }}",
+              "type": "string"
+            },
+            {
+              "id": "2d5ca4de-9bd5-4c35-96bc-03b130120e80",
+              "name": "Location",
+              "value": "={{ $json.location.formattedAddressLong }}",
+              "type": "string"
+            },
+            {
+              "id": "153b14b6-e253-4143-a095-b3c506107c21",
+              "name": "Job_Description",
+              "value": "={{ $json.descriptionText }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -352,
+        -304
+      ],
+      "id": "b1ebceb8-de58-4ed6-bc34-7da3a94ca407",
+      "name": "Edit Fields (1st)"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "8a17f91d-a602-414a-960f-54208f777035",
+              "name": "Job_Title",
+              "value": "={{ $('Edit Fields (1st)').item.json.Job_Title }}",
+              "type": "string"
+            },
+            {
+              "id": "b2c82cdb-90ff-42cc-a79c-af42cc291354",
+              "name": "Company",
+              "value": "={{ $('Edit Fields (1st)').item.json.Company }}",
+              "type": "string"
+            },
+            {
+              "id": "570c7215-e4a7-4170-a4a1-ec135a5d9006",
+              "name": "Job_URL",
+              "value": "={{ $('Edit Fields (1st)').item.json.Job_URL }}",
+              "type": "string"
+            },
+            {
+              "id": "3b220017-bbc8-42cd-8607-be6d4e678aad",
+              "name": "Match_Score",
+              "value": "={{ JSON.parse($json.output).match_score }}",
+              "type": "string"
+            },
+            {
+              "id": "f4888cff-05ae-49f0-aca9-487f25c9963b",
+              "name": "Required_Skills",
+              "value": "={{ JSON.parse($json.output).required_skills }}",
+              "type": "string"
+            },
+            {
+              "id": "8b291cb7-1881-4c64-aa7a-f65ed9585b68",
+              "name": "Missing_Skills",
+              "value": "={{ JSON.parse($json.output).missing_skills }}",
+              "type": "string"
+            },
+            {
+              "id": "6723e158-f13e-40ac-8cfd-18cf83faa09c",
+              "name": "Analysis",
+              "value": "={{ JSON.parse($json.output).analysis }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        224,
+        -144
+      ],
+      "id": "e63c12ef-5a58-48db-8cca-94ede76a0311",
+      "name": "Edit Fields (2nd)"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "00bd9b86-e75f-4708-a779-21e1f521e1f8",
+              "name": "Cover_Letter",
+              "value": "={{ $json.output }}",
+              "type": "string"
+            },
+            {
+              "id": "154fb9a4-e9b1-4e6c-8cc7-025730550520",
+              "name": "Job_Title",
+              "value": "={{ $('Edit Fields (1st)').item.json.Job_Title }}",
+              "type": "string"
+            },
+            {
+              "id": "c55bf0a4-20e5-444b-a06d-4f3919122c05",
+              "name": "Company",
+              "value": "={{ $('Edit Fields (1st)').item.json.Company }}",
+              "type": "string"
+            },
+            {
+              "id": "e9ab1111-b5c8-42b8-813d-c451abc80b09",
+              "name": "Job_URL",
+              "value": "={{ $('Edit Fields (1st)').item.json.Job_URL }}",
+              "type": "string"
+            },
+            {
+              "id": "e009f087-e684-4678-8f06-b7172be502c7",
+              "name": "Match_Score",
+              "value": "={{ $('Edit Fields (2nd)').item.json.Match_Score }}",
+              "type": "string"
+            },
+            {
+              "id": "d2e1ac52-b6cb-4542-bdde-b981b75db97c",
+              "name": "Required_Skills",
+              "value": "={{ $('Edit Fields (2nd)').item.json.Required_Skills }}",
+              "type": "string"
+            },
+            {
+              "id": "556b38a2-cedb-47b8-ab26-ad91f1f4a421",
+              "name": "Missing_Skills",
+              "value": "={{ $('Edit Fields (2nd)').item.json.Missing_Skills }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        720,
+        -144
+      ],
+      "id": "46201241-49a3-470e-ae2f-5a45409d853c",
+      "name": "Edit Fields (3rd)"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ac9f9841-c77c-4318-b1f2-0653a1861d19",
+              "name": "Tailored_Resume",
+              "value": "={{ $json.output }}",
+              "type": "string"
+            },
+            {
+              "id": "73e59c86-3cbd-46d8-b571-4f292544de46",
+              "name": "Job_Title",
+              "value": "={{ $('Edit Fields (1st)').item.json.Job_Title }}",
+              "type": "string"
+            },
+            {
+              "id": "c7f44538-c372-4866-a5c1-85fd061bf681",
+              "name": "Company",
+              "value": "={{ $('Edit Fields (1st)').item.json.Company }}",
+              "type": "string"
+            },
+            {
+              "id": "9edfdcc8-94d4-4af1-9e91-95a9e3229c39",
+              "name": "Job_URL",
+              "value": "={{ $('Edit Fields (1st)').item.json.Job_URL }}",
+              "type": "string"
+            },
+            {
+              "id": "ba2b1da2-03bb-493c-926e-092eb41db304",
+              "name": "Match_Score",
+              "value": "={{ $('Edit Fields (2nd)').item.json.Match_Score }}",
+              "type": "string"
+            },
+            {
+              "id": "e39f0d25-f7ff-4832-88a2-a9785250ac04",
+              "name": "Required_Skills",
+              "value": "={{ $('Edit Fields (2nd)').item.json.Required_Skills }}",
+              "type": "string"
+            },
+            {
+              "id": "cf0739e6-1503-4de9-a8ae-d275d83cb5f1",
+              "name": "Missing_Skills",
+              "value": "={{ $('Edit Fields (2nd)').item.json.Missing_Skills }}",
+              "type": "string"
+            },
+            {
+              "id": "aa7d1278-13d0-4b2b-8faf-75d6cdc67ec9",
+              "name": "Analysis",
+              "value": "={{ $('Edit Fields (2nd)').item.json.Analysis }}",
+              "type": "string"
+            },
+            {
+              "id": "2fc33724-2b84-41cb-828a-cac6b309fb4a",
+              "name": "Cover_Letter",
+              "value": "={{ $('Edit Fields (3rd)').item.json.Cover_Letter }}",
+              "type": "string"
+            },
+            {
+              "id": "1a69381d-78ce-4c74-b0d2-df26901c392d",
+              "name": "Applied_Date",
+              "value": "={{ new Date().toLocaleDateString() }}",
+              "type": "string"
+            },
+            {
+              "id": "46459152-b23f-43fb-b6f9-89bf17a570b9",
+              "name": "Status",
+              "value": "To Review",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1328,
+        -304
+      ],
+      "id": "983e040a-aa60-4274-bd79-c979372cfa48",
+      "name": "Edit Fields (4th)"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "You are a technical recruiter. Analyze this job posting against the candidate's resume.\n\nJOB TITLE: {{ $('Edit Fields').item.json.Job_Title }}\nCOMPANY: {{ $('Edit Fields').item.json.Company }}\nJOB DESCRIPTION TEXT:\n{{ $('Edit Fields').item.json.Job_Description }}\n\nCANDIDATE RESUME:\n{{ $('Extract from File').item.json.text }}\n\nTASK:\n1. Read the job description word by word\n2. Extract technical skills mentioned (programming languages, frameworks, tools, databases)\n3. Compare with candidate's resume skills\n4. Calculate match score as a percentage (0-100)\n5. List skills the candidate is MISSING\n\nCRITICAL RULES:\n- Match scores MUST be different for each job (realistic variation: 45, 67, 82, 91, etc.)\n- DO NOT output 75 for every job\n- Required skills should be COMMA-SEPARATED (not in brackets)\n- Missing skills should be COMMA-SEPARATED (not in brackets)\n\nReturn ONLY this exact JSON format (no markdown, no extra text):\n{\"match_score\": 78, \"required_skills\": \"Python, Docker, AWS, Kubernetes\", \"missing_skills\": \"Azure, Jenkins\", \"analysis\": \"Strong match with most backend skills but lacking some DevOps tools\"}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        -80,
+        -144
+      ],
+      "id": "43f0dba3-7951-46c2-a685-6d656d7bab6c",
+      "name": "AI Agent (Analysis)"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "Write a cover letter for this job. Use the ACTUAL company name and location provided below - DO NOT use placeholders like [Company Name] or brackets.\n\nApplicant: Umair Elahi (uelahi502@gmail.com, Islamabad, Pakistan)\nCompany: {{ $('Edit Fields').item.json.Company }}\nJob Title: {{ $('Edit Fields').item.json.Job_Title }}\nLocation: {{ $('Edit Fields').item.json.Location }}\nRequired Skills: {{ $('Edit Fields1').item.json.Required_Skills }}\nMissing Skills: {{ $('Edit Fields1').item.json.Missing_Skills }}\n\nCRITICAL INSTRUCTIONS:\n- Write the ACTUAL company name from the Company field above\n- Write the ACTUAL location from the Location field above\n- Write today's date in format: March 1, 2026\n- DO NOT use [Company Name], [Company Location], [Job Title], or [Date]\n- DO NOT use brackets {{ }} or any placeholders in the output\n\nWrite 3 paragraphs only:\n- Paragraph 1: Interest in the specific job title at the actual company name\n- Paragraph 2: Experience with required skills (mention lane detection, fire detection, object detection)\n- Paragraph 3: Learning missing skills and closing\n\nFormat exactly as:\nUmair Elahi\nIslamabad, Pakistan\nuelahi502@gmail.com\n\nMarch 1, 2026\n\nHiring Manager\n[Use actual company name here]\n[Use actual location here]\n\nDear Hiring Manager,\n\n[Write 3 paragraphs using ACTUAL company name, job title - no placeholders]\n\nSincerely,\nUmair Elahi",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        416,
+        -144
+      ],
+      "id": "108fd3bb-8a9b-4b2a-8f7e-c3d572ffeaa1",
+      "name": "AI Agent (Cover Letter)"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "Rewrite this resume summary for this specific job using the ACTUAL company name, job title, and skills provided.\n\nJob Title: {{ $('Edit Fields').item.json.Job_Title }}\nCompany: {{ $('Edit Fields').item.json.Company }}\nLocation: {{ $('Edit Fields').item.json.Location }}\nRequired Skills: {{ $('Edit Fields1').item.json.Required_Skills }}\nMissing Skills: {{ $('Edit Fields1').item.json.Missing_Skills }}\n\nOriginal Resume:\n{{ $('Extract from File').item.json.text }}\n\nCRITICAL INSTRUCTIONS:\nWrite a 3-4 sentence resume summary that:\n1. Uses the ACTUAL company name: {{ $('Edit Fields').item.json.Company }}\n2. Uses the ACTUAL job title: {{ $('Edit Fields').item.json.Job_Title }}\n3. Mentions these ACTUAL required skills: {{ $('Edit Fields1').item.json.Required_Skills }}\n4. States you're actively learning these ACTUAL missing skills: {{ $('Edit Fields1').item.json.Missing_Skills }}\n5. References specific projects: lane detection, fire detection, object detection\n6. Contains ZERO placeholder text like [Company], [insert], [relevant], [Job Title]\n7. Contains ZERO {{ }} symbols in the output\n8. Uses the actual values from the fields above\n\nEXAMPLE OUTPUT FORMAT (but use ACTUAL values):\n\"Computer vision engineer with expertise in Python, TensorFlow, and OpenCV, seeking to contribute to Microsoft's AI initiatives. Proven track record in lane detection, fire detection, and object detection projects. Currently expanding expertise in Azure and cloud deployment to align with Senior ML Engineer role requirements.\"\n\nReturn ONLY the 3-4 sentence summary with real company name, real job title, and real skills - nothing else.",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        912,
+        -144
+      ],
+      "id": "2b470028-59c2-4d3e-acdb-491ee611e0af",
+      "name": "Resume Tailoring"
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1_sqPUe1Vwh68g_01nUVUuBI7iiUTze3LwL3wsRMxGPM/edit?usp=drive_link",
+          "mode": "url"
+        },
+        "options": {
+          "binaryPropertyName": "data",
+          "googleFileConversion": {
+            "conversion": {
+              "sheetsToFormat": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        1280,
+        192
+      ],
+      "id": "a4a5ad43-5784-40bd-81b6-8c86c520781f",
+      "name": "Google Drive (Download)",
+      "retryOnFail": false,
+      "waitBetweenTries": 5000,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "uVJF7YYvxnuKaAL4",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1_sqPUe1Vwh68g_01nUVUuBI7iiUTze3LwL3wsRMxGPM",
+          "mode": "list",
+          "cachedResultName": "Job Applications Tracker",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1_sqPUe1Vwh68g_01nUVUuBI7iiUTze3LwL3wsRMxGPM/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1_sqPUe1Vwh68g_01nUVUuBI7iiUTze3LwL3wsRMxGPM/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {
+            "Job_URL": "={{ $json.Job_URL }}",
+            "Job_Title": "{{ $('Edit Fields').item.json.Job_Title }}",
+            "Company": "{{ $json.Company }}",
+            "Match_Score": "{{ $json.Match_Score }}",
+            "Required_Skills": "{{ $json.Required_Skills }}",
+            "Missing_Skills": "{{ $json.Missing_Skills }}",
+            "Applied_Date": "{{ new Date().toLocaleDateString() }}",
+            "Status": "To Review"
+          },
+          "matchingColumns": [
+            "Job_URL"
+          ],
+          "schema": [
+            {
+              "id": "Job_Title",
+              "displayName": "Job_Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Company",
+              "displayName": "Company",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Job_URL",
+              "displayName": "Job_URL",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Match_Score",
+              "displayName": "Match_Score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Required_Skills",
+              "displayName": "Required_Skills",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Missing_Skills",
+              "displayName": "Missing_Skills",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Tailored_Resume",
+              "displayName": "Tailored_Resume",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Cover_Letter",
+              "displayName": "Cover_Letter",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Applied_Date",
+              "displayName": "Applied_Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Analysis",
+              "displayName": "Analysis",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1280,
+        -32
+      ],
+      "id": "6ba0293e-1292-414d-9e88-c0e173bd409e",
+      "name": "Google Sheets (Write)",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "0zCmFl7PbSSnlb34",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "OpenRouter Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent (Analysis)",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Resume Tailoring",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent (Cover Letter)",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "Google Drive (Download)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        [
+          {
+            "node": "Clear sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger - Every day at 9 AM": {
+      "main": [
+        [
+          {
+            "node": "Google Drive    - Download your CV (PDF)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Drive    - Download your CV (PDF)": {
+      "main": [
+        [
+          {
+            "node": "Extract from File    - Extract text from PDF",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File    - Extract text from PDF": {
+      "main": [
+        [
+          {
+            "node": "Fetch 15 fresh jobs from RapidAPI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Splits 15 jobs into individual items": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields (1st)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch 15 fresh jobs from RapidAPI": {
+      "main": [
+        [
+          {
+            "node": "Splits 15 jobs into individual items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields (1st)": {
+      "main": [
+        [
+          {
+            "node": "AI Agent (Analysis)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields (2nd)": {
+      "main": [
+        [
+          {
+            "node": "AI Agent (Cover Letter)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields (3rd)": {
+      "main": [
+        [
+          {
+            "node": "Resume Tailoring",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields (4th)": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets (Write)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent (Analysis)": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields (2nd)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent (Cover Letter)": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields (3rd)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Resume Tailoring": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields (4th)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Drive (Download)": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets (Write)": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "e596f881-9d40-4bc0-a248-5e043ef730c4",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "b3a6a2700fcdd2b53b851c70fa54408fdcc7fb1a55a3f7fbe3559709ed958e0b"
+  },
+  "id": "gV3nWVWhl7MLQkCd",
+  "tags": []
+}
